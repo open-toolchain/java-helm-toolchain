@@ -4,9 +4,60 @@ stages:
   inputs:
   - type: git
     branch: master
-    service: ${GIT_REPO}    
+    service: ${GIT_REPO}
   triggers:
   - type: commit
+  properties:
+  - name: LOGICAL_APP_NAME
+    value: ${APP_NAME}
+    type: text
+  - name: BUILD_PREFIX
+    value: master
+    type: text
+  jobs:
+  - name: Maven
+    type: builder
+    artifact_dir: ''
+    build_type: maven
+    script: |+
+      #!/bin/bash
+      # set -x
+      # source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/fetch_git_creds.sh")
+      echo "Doing Java build"
+      echo "DevOps sets LOG_DIR env var, which is used during Java build to check if server started, so unsetting"
+      echo "LOG_DIR: ${LOG_DIR}"
+      LOG_DIR_TEMP=$LOG_DIR
+      unset LOG_DIR
+      echo "LOG_DIR has been unset: ${LOG_DIR}"
+
+      export JAVA_HOME=$JAVA8_HOME
+      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+      ./mvnw install -DskipTests
+
+      echo "Java build finished, setting LOG_DIR back to original"
+      LOG_DIR=$LOG_DIR_TEMP
+      echo "LOG_DIR: ${LOG_DIR}"
+  - name: Unit Tests
+    type: tester
+    script: |-
+      #!/bin/bash
+      # set -x
+      if [ -f ./tests/run-tests.sh ]; then
+        source ./tests/run-tests.sh
+      else
+        echo "Test runner script not found: ./tests/run-tests.sh"
+      fi
+- name: CONTAINERIZE
+  inputs:
+  - type: job
+    stage: BUILD
+    job: Maven
+  triggers:
+  - type: stage
+  properties:
+  - name: buildprops
+    value: build.properties
+    type: file
   properties:
   - name: DOCKER_ROOT
     value: .
