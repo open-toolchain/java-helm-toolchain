@@ -17,7 +17,7 @@ template:
     git branch: >-
       [master](https://github.com/open-toolchain/simple-helm-toolchain/tree/master)
 toolchain:
-  name: 'helm-toolchain-{{timestamp}}'
+  name: 'helm-java-toolchain-{{timestamp}}'
   template:
     getting_started:
       $ref: "#/messages/template.gettingStarted" 
@@ -35,7 +35,7 @@ services:
     parameters:
       services:
         - repo
-      name: 'hello-helm-{{timestamp}}'
+      name: 'pipeline'
       ui-pipeline: true
       configuration:
         content:
