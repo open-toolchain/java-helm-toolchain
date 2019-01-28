@@ -259,7 +259,7 @@ stages:
 - name: VALIDATE
   inputs:
   - type: job
-    stage: BUILD
+    stage: CONTAINERIZE
     job: Build Docker image
   triggers:
   - type: stage
@@ -340,7 +340,7 @@ stages:
 - name: PROD
   inputs:
   - type: job
-    stage: BUILD
+    stage: CONTAINERIZE
     job: Build Docker image
   triggers:
   - type: stage
