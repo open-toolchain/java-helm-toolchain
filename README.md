@@ -1,15 +1,15 @@
-# ![Icon](./.bluemix/secure-lock-helm.png) Develop a Kubernetes app with Helm
+# ![Icon](./.bluemix/secure-lock-helm.png) Develop a Kubernetes Java app with Helm
 
 
 ### Continuously deliver a secure Docker app to a Kubernetes Cluster using a Helm Chart
-This Hello World application uses Docker and Kubernetes Helm in a DevOps toolchain preconfigured for 
+This Hello World application uses Javan Docker and Kubernetes Helm in a DevOps toolchain preconfigured for 
 continuous delivery to a Kubernetes cluster. It automates numerous tasks such automatic triggering from Git
 commits, issue tracking, online editing, automatic linting of files, configuration of target cluster permissions to private image registry, etc... through a preconfigured Delivery Pipeline.
 
 ![Icon](./toolchain-flow.png)
 
 ### To get started, click this button:
-[![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.com/devops/setup/deploy/?repository=https%3A//github.com/open-toolchain/java-helm-toolchain)
+[![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https%3A%2F%2Fgithub.com%2Fopen-toolchain%2Fjava-helm-toolchain&env_id=ibm:yp:us-south)
 
 ### Use it with your own application:
 This template assumes an application (e.g. [hello-helm](https://github.com/open-toolchain/hello-helm)) structured like this  :
@@ -17,6 +17,7 @@ This template assumes an application (e.g. [hello-helm](https://github.com/open-
 - `/chart /your-app-name`  [configurable] -- the Helm Chart used to deploy this application. The CI pipeline automatically binding it with build information (e.g. image tag) leveraging Helm ability to parameterize deployment actions. (can be configured in pipeline PROD deploy stage properties)
 
 It implements the following best practices:
+- build the Java application using maven
 - sanity check the Dockerfile prior to attempting creating the image,
 - build container image on every Git commit,
 - use a private image registry to store the built image, automatically configure access permissions for target cluster deployment using API tokens than can be revoked,
