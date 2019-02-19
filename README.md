@@ -1,10 +1,10 @@
 # ![Icon](./.bluemix/secure-lock-helm.png) Develop a Kubernetes Java app with Helm
 
 
-### Continuously deliver a secure Docker app to a Kubernetes Cluster using a Helm Chart
-This Hello World application uses Javan Docker and Kubernetes Helm in a DevOps toolchain preconfigured for 
+### Continuously deliver a secure Java app to a Kubernetes Cluster using a Helm Chart
+This Hello World microservice app uses Java, Docker and Kubernetes Helm in a DevOps toolchain preconfigured for 
 continuous delivery to a Kubernetes cluster. It automates numerous tasks such automatic triggering from Git
-commits, issue tracking, online editing, automatic linting of files, configuration of target cluster permissions to private image registry, etc... through a preconfigured Delivery Pipeline.
+commits, issue tracking, online editing, maven build, automatic linting of files, configuration of target cluster permissions to private image registry, etc... through a preconfigured Delivery Pipeline.
 
 ![Icon](./toolchain-flow.png)
 
@@ -12,7 +12,7 @@ commits, issue tracking, online editing, automatic linting of files, configurati
 [![Create toolchain](https://cloud.ibm.com/devops/graphics/create_toolchain_button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https%3A%2F%2Fgithub.com%2Fopen-toolchain%2Fjava-helm-toolchain&env_id=ibm:yp:us-south)
 
 ### Use it with your own application:
-This template assumes an application (e.g. [hello-helm](https://github.com/open-toolchain/hello-helm)) structured like this  :
+This template assumes an application (e.g. [java-spring-microservice](https://github.com/open-toolchain/java-spring-microservice)) structured like this  :
 - `/Dockerfile` [configurable] -- the docker file used to build the container image in root folder (can be configured in pipeline BUILD stage properties)
 - `/chart /your-app-name`  [configurable] -- the Helm Chart used to deploy this application. The CI pipeline automatically binding it with build information (e.g. image tag) leveraging Helm ability to parameterize deployment actions. (can be configured in pipeline PROD deploy stage properties)
 
