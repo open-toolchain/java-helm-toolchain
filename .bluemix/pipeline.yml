@@ -1,8 +1,12 @@
 ---
+curatedDockerImage: latest
 properties:
 - name: HELM_VERSION
   value: '2.12.3'
   type: text
+- name: buildprops
+  value: build.properties
+  type: file
 stages:
 - name: BUILD
   inputs:
@@ -58,10 +62,6 @@ stages:
   triggers:
   - type: stage
   properties:
-  - name: buildprops
-    value: build.properties
-    type: file
-  properties:
   - name: DOCKER_ROOT
     value: .
     type: text
@@ -86,6 +86,8 @@ stages:
       #    source ./scripts/check_prebuild.sh
       # alternatively, you can source it from online script:
       #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh")
+      # ------------------
+      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh
 
       # Lints Dockerfile and checks presence of registry namespace.
       source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_prebuild.sh")
@@ -106,6 +108,8 @@ stages:
       #    source ./scripts/build_image.sh
       # alternatively, you can source it from online script:
       #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh")
+      # ------------------
+      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/build_image.sh
 
       # Build a Docker image into IBM Container Service private image registry.
       # Minting image tag using format: BUILD_NUMBER-BRANCH-COMMIT_ID-TIMESTAMP
@@ -118,10 +122,6 @@ stages:
     job: Build Docker image
   triggers:
   - type: stage
-  properties:
-  - name: buildprops
-    value: build.properties
-    type: file
   jobs:
   - name: Vulnerability Advisor
     type: tester
@@ -139,7 +139,9 @@ stages:
       #    source ./scripts/check_vulnerabilities.sh
       # alternatively, you can source it from online script:
       #    source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
-      
+      # ------------------
+      # source: https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh
+
       # Check for vulnerabilities of built image using Vulnerability Advisor
       source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
 - name: PROD
@@ -150,9 +152,6 @@ stages:
   triggers:
   - type: stage
   properties:
-  - name: buildprops
-    value: build.properties
-    type: file 
   - name: CLUSTER_NAMESPACE
     value: ${PROD_CLUSTER_NAMESPACE}
     type: text
