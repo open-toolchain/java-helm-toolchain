@@ -20,7 +20,7 @@ toolchain:
   name: 'helm-java-toolchain-{{timestamp}}'
   template:
     getting_started:
-      $ref: "#/messages/template.gettingStarted" 
+      $ref: "#/messages/template.gettingStarted"
 services:
   repo:
     service_id: hostedgit
