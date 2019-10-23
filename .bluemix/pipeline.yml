@@ -46,7 +46,7 @@ stages:
   inputs:
   - type: job
     stage: BUILD
-    job: Maven
+    job: Maven build & test
   triggers:
   - type: stage
   properties:
