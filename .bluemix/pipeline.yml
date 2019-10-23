@@ -4,9 +4,6 @@ properties:
 - name: HELM_VERSION
   value: '2.12.3'
   type: text
-- name: buildprops
-  value: build.properties
-  type: file
 stages:
 - name: BUILD
   inputs:
