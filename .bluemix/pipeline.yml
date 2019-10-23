@@ -4,9 +4,6 @@ properties:
 - name: HELM_VERSION
   value: '2.12.3'
   type: text
-- name: buildprops
-  value: build.properties
-  type: file
 stages:
 - name: BUILD
   inputs:
@@ -23,10 +20,12 @@ stages:
     value: master
     type: text
   jobs:
-  - name: Maven
+  - name: Maven build & test
     type: builder
     artifact_dir: ''
     build_type: maven
+    enable_tests: true
+    test_file_pattern: target/surefire-reports/TEST-*.xml
     script: |+
       #!/bin/bash
       # set -x
@@ -38,26 +37,16 @@ stages:
       echo "LOG_DIR has been unset: ${LOG_DIR}"
 
       mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
-      ./mvnw install -DskipTests
+      ./mvnw install
 
       echo "Java build finished, setting LOG_DIR back to original"
       LOG_DIR=$LOG_DIR_TEMP
       echo "LOG_DIR: ${LOG_DIR}"
-  - name: Unit Tests
-    type: tester
-    script: |-
-      #!/bin/bash
-      # set -x
-      if [ -f ./tests/run-tests.sh ]; then
-        source ./tests/run-tests.sh
-      else
-        echo "Test runner script not found: ./tests/run-tests.sh"
-      fi
 - name: CONTAINERIZE
   inputs:
   - type: job
     stage: BUILD
-    job: Maven
+    job: Maven build & test
   triggers:
   - type: stage
   properties:
@@ -66,7 +55,10 @@ stages:
     type: text
   - name: DOCKER_FILE
     value: Dockerfile
-    type: text  
+    type: text
+  - name: build_proprties
+    value: build.properties
+    type: file
   jobs:
   - name: Pre-build check
     type: builder
@@ -121,6 +113,10 @@ stages:
     job: Build Docker image
   triggers:
   - type: stage
+  properties:
+  - name: build_proprties
+    value: build.properties
+    type: file
   jobs:
   - name: Vulnerability Advisor
     type: tester
@@ -159,7 +155,10 @@ stages:
     type: text
   - name: APP_URL
     value: undefined
-    type: text     
+    type: text
+  - name: build_proprties
+    value: build.properties
+    type: file
   jobs:
   - name: Pre-deploy check
     type: deployer
